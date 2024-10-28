@@ -1,0 +1,21 @@
+.logo{
+    min-width: 62px;
+    height: 62px;
+    transition: 100ms;
+    display: flex;
+    float: left;
+    justify-content: center;
+    align-items: center;
+    background-color: #1E1E1E;
+    border-radius: 31px;
+    span{
+        display: none;
+    }
+    &.animated {
+        padding-inline: 20px 35px;
+        span{
+            display: block;
+        }
+    }
+}
+
