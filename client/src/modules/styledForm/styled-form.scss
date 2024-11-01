@@ -1,22 +1,36 @@
+
 .styled-form{
+    position: relative;
     padding-inline: 20px;
     width: 560px;
     background: #1E1E1E;
-    input {
-        background: none;
-        &::placeholder{
-            color: #545454;
+    border-radius: 20px;
+    .form-data{
+        input {
+            background: none;
+            &::placeholder{
+                color: #545454;
+            }
+        }
+        * {
+            font-family: "Robotic";
+            width: 100%;
+            font-weight: 300;
+            padding-block: 15px;
+            border: none;
+            border-bottom: 2px solid white;   
+            &:last-child{
+                border-bottom: none;
+            }
         }
     }
-    * {
-        font-family: "Robotic";
-        width: 100%;
-        font-weight: 300;
-        padding-block: 15px;
-        border: none;
-        border-bottom: 2px solid white;   
-        &:last-child{
-            border-bottom: none;
-        }
+    .go-btn {
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        translate: -50% -50%;
+        width: 64px;
+        height: 64px;
+        border-radius: 100%;
     }
 }

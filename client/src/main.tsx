@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import App from './App';
 import './reset.css'
-import SignIn from './pages/SignIn/SignIn';
+import Auth from './pages/Auth/Auth';
 
 const router = createBrowserRouter([
   {
@@ -15,8 +15,8 @@ const router = createBrowserRouter([
     ,
   },
   {
-    path: "/signin",
-    element: <SignIn />,
+    path: "auth/:authType",
+    element: <Auth />,
   },
 ]);
 

@@ -1,0 +1,22 @@
+.auth-content-wrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    .auth-type{
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        svg{
+            padding: 8px;
+            background-color: #1E1E1E;
+            border-radius: 100%;
+            width: 27px;
+        }
+        h1 {
+            margin-left: 10px;
+        }
+    }
+}

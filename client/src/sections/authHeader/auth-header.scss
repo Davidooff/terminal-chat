@@ -1,0 +1,10 @@
+.auth-header{
+    height: 64px;
+    margin-top: 20px;
+    position: absolute;
+    width: calc(100% - 40px);
+    padding-inline: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

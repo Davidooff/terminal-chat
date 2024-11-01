@@ -20,7 +20,10 @@ interface Props {
 function StyledForm(props: Props) {
     return (
         <form onSubmit={props.onSubmit} className='styled-form'>
-            {props.formEl.map(el => el.type == "input"? <input type="text" placeholder={el.placeholder} /> : <p>{el.placeholder}</p>)}
+            <div className='form-data'>
+                {props.formEl.map((el, i) => el.type == "input"? <input type="text" placeholder={el.placeholder} key={i}/> : <p key={i}>{el.placeholder}</p>)}    
+            </div>
+            {props.submitBtn.type == "go"? <button className='go-btn'>{"GO >"}</button> : ""}
         </form>
     )
 }
