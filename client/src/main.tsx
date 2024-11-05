@@ -5,9 +5,10 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import App from './App';
-import './reset.css'
 import Auth from './pages/Auth/Auth';
 import './main.scss';
+
+import './reset.css';
 
 const router = createBrowserRouter([
   {

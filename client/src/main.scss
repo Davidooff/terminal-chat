@@ -1,6 +1,12 @@
-@import './styles/font_variables';
+@use './styles/font_variables' as font;
 
 body, html{
-    font-family: $default_font;
-    font-size: $default_font_size;
+    font-family: font.$default_font;
+    font-size: font.$default_font_size;
+}
+
+a{
+	color: #A3CEFF;
+	font-style: italic;
+	text-decoration: none;
 }

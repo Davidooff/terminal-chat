@@ -13,6 +13,9 @@
             &::placeholder{
                 color: vars.$form_placeholder_color;
             }
+            &:focus{
+                outline: none;;
+            }
         }
         * {
             width: 100%;

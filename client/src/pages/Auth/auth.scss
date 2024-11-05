@@ -1,4 +1,5 @@
 @use '../../styles/form_variables' as vars;
+@use '../../styles/font_variables' as font;
 
 .auth-content-wrapper{
     display: flex;
@@ -19,6 +20,7 @@
         }
         h1 {
             margin-left: 10px;
+            font-size: font.$large_font_size;
         }
     }
 }

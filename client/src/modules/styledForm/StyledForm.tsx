@@ -13,7 +13,7 @@ interface Props {
                 onSubmit: () => void
             }[]
         },
-    onSubmit: () => void
+    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void
 }
 
 
