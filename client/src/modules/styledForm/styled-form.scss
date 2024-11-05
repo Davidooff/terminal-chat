@@ -1,21 +1,22 @@
+@use '../../styles/form_variables' as vars;
+@use '../../styles/font_variables' as font;
 
 .styled-form{
     position: relative;
     padding-inline: 20px;
     width: 560px;
-    background: #1E1E1E;
+    background: vars.$form_box_background;
     border-radius: 20px;
     .form-data{
         input {
             background: none;
             &::placeholder{
-                color: #545454;
+                color: vars.$form_placeholder_color;
             }
         }
         * {
-            font-family: "Robotic";
             width: 100%;
-            font-weight: 300;
+            font-weight: font.$default_light_weight;
             padding-block: 15px;
             border: none;
             border-bottom: 2px solid white;   

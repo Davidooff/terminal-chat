@@ -1,0 +1,6 @@
+@import './styles/font_variables';
+
+body, html{
+    font-family: $default_font;
+    font-size: $default_font_size;
+}

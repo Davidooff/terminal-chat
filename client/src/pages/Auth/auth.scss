@@ -1,3 +1,5 @@
+@use '../../styles/form_variables' as vars;
+
 .auth-content-wrapper{
     display: flex;
     flex-direction: column;
@@ -11,7 +13,7 @@
         margin-bottom: 15px;
         svg{
             padding: 8px;
-            background-color: #1E1E1E;
+            background-color: vars.$form_box_background;
             border-radius: 100%;
             width: 27px;
         }
