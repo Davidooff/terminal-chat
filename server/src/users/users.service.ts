@@ -3,8 +3,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, ObjectId } from 'mongoose';
-import { hash } from 'bcrypt';
+import { hash, compare } from 'bcrypt';
 import { sign } from 'jsonwebtoken';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -36,7 +37,9 @@ export class UsersService {
     };
   }
 
-  async create(newUser: CreateUserDto) {
+  async create(
+    newUser: CreateUserDto,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const existingUser = await this.userModel.findOne({
       username: newUser.username,
     });
@@ -67,6 +70,36 @@ export class UsersService {
         'Unable to create User in database',
         HttpStatus.I_AM_A_TEAPOT,
       );
+    }
+  }
+
+  async login(
+    userData: LoginUserDto,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    const userDb = await this.userModel.findOne({
+      username: userData.username,
+    });
+
+    if (!userDb) {
+      throw new HttpException(
+        'User with this username not exists',
+        HttpStatus.CONFLICT,
+      );
+    }
+
+    const isPasswordCorect = await compare(userData.password, userDb.password);
+    if (isPasswordCorect) {
+      const userTokens = this.createTokens(
+        userDb._id.toString(),
+        userDb.username,
+      );
+
+      userDb.refreshTokens.push(userTokens.refreshToken);
+      await userDb.save();
+
+      return userTokens;
+    } else {
+      throw new HttpException('Password incorect', HttpStatus.I_AM_A_TEAPOT);
     }
   }
 }
