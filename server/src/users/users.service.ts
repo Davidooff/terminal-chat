@@ -2,8 +2,9 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId } from 'mongoose';
 import { hash } from 'bcrypt';
+import { sign } from 'jsonwebtoken';
 
 @Injectable()
 export class UsersService {
@@ -11,6 +12,28 @@ export class UsersService {
 
   hashData(data: string) {
     return hash(data, 10);
+  }
+
+  createTokens(
+    id: string,
+    username: string,
+  ): { accessToken: string; refreshToken: string } {
+    return {
+      accessToken: sign(
+        {
+          data: username,
+        },
+        process.env.SECRET ?? 'secret',
+        { expiresIn: '30m' },
+      ),
+      refreshToken: sign(
+        {
+          data: id,
+        },
+        process.env.SECRET ?? 'secret',
+        { expiresIn: '30d' },
+      ),
+    };
   }
 
   async create(newUser: CreateUserDto) {
@@ -25,11 +48,20 @@ export class UsersService {
       );
     }
     try {
-      await this.userModel.create({
+      const createdUser = await this.userModel.create({
         ...newUser,
         password: await this.hashData(newUser.password),
       });
-      return;
+
+      const userTokens = this.createTokens(
+        createdUser._id.toString(),
+        createdUser.username,
+      );
+
+      createdUser.refreshTokens.push(userTokens.refreshToken);
+      await createdUser.save();
+
+      return userTokens;
     } catch {
       throw new HttpException(
         'Unable to create User in database',
