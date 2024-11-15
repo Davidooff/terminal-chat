@@ -5,7 +5,8 @@ import { User } from './schemas/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { hash, compare } from 'bcrypt';
-import { sign, verify } from 'jsonwebtoken';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
+import { LogOutDto } from './dto/logout.dto';
 
 @Injectable()
 export class UsersService {
@@ -155,6 +156,67 @@ export class UsersService {
       return userTokens;
     } else {
       throw new HttpException('Password incorrect', HttpStatus.UNAUTHORIZED);
+    }
+  }
+
+  async logout(logOutDto: LogOutDto) {
+    const token = logOutDto.refreshToken;
+    const secret = process.env.SECRET ?? 'secret';
+
+    const tokenData = verify(token, secret) as JwtPayload;
+    const inTokenId = tokenData.data;
+
+    const userFromDb = await this.userModel.findById(inTokenId);
+    if (userFromDb) {
+      const index = userFromDb.refreshTokens.indexOf(token);
+      if (index !== -1) {
+        userFromDb.refreshTokens.splice(index, 1);
+        // Save the user to persist changes to the database
+        await userFromDb.save();
+      } else {
+        throw new HttpException(
+          "This user don't have this token",
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    } else {
+      throw new HttpException(
+        'Unable to find user whith this token',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async refreshToken(logOutDto: LogOutDto) {
+    const token = logOutDto.refreshToken;
+    const secret = process.env.SECRET ?? 'secret';
+
+    const tokenData = verify(token, secret) as JwtPayload;
+    const inTokenId = tokenData.data;
+
+    const userFromDb = await this.userModel.findById(inTokenId);
+    if (userFromDb) {
+      const index = userFromDb.refreshTokens.indexOf(token);
+      if (index !== -1) {
+        const newTokens = this.createTokens(
+          userFromDb._id.toString(),
+          userFromDb.username,
+        );
+        userFromDb.refreshTokens[index] = newTokens.refreshToken;
+        // Save the user to persist changes to the database
+        await userFromDb.save();
+        return newTokens;
+      } else {
+        throw new HttpException(
+          "This user don't have this token",
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    } else {
+      throw new HttpException(
+        'Unable to find user whith this token',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { verify } from 'jsonwebtoken';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
