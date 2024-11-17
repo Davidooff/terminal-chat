@@ -27,7 +27,7 @@ export class UsersController {
   }
 
   @Public()
-  @Post('refreshToken')
+  @Post('refresh')
   @UseGuards(RefreshTokenGuard)
   async refreshToken(@Body() logOutDto: LogOutDto) {
     return await this.usersService.refreshToken(logOutDto);
